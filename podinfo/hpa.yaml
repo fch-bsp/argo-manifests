@@ -1,0 +1,21 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: podinfo
+  namespace: test
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  metrics:
+    - type: Object
+      object:
+        metricName: requests_per_second_podinfo
+        target:
+          apiVersion: v1
+          kind: Service
+          name: podinfo-canary
+        targetValue: 10
